@@ -1,24 +1,49 @@
-from io import BytesIO
-from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import status
-from PIL import Image
-from django.core.files import File
 import requests
 from .models import *
 from .serializers import *
 
-class ExampleView(APIView):
-    def get(self, request, *args, **kwargs):
-        return Response({'you': 'sucker'}, status=status.HTTP_200_OK)
-    
 
-class ParseMoviesView(APIView):
+class CommentViewSet(ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': 'Comment has been created'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ThingViewSet(ModelViewSet):
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+
+    def get_permissions(self):
+        if self.action == "list" or self.action == "retrieve":
+            permission_classes = [AllowAny, ]
+        else:
+            permission_classes = [IsAdminUser, ]
+
+        return [permission() for permission in permission_classes]
+
+    def list(self, request, *args, **kwargs):
+        search_str = self.request.GET.get('string', '')
+        return Response(self.serializer_class(Thing.objects.filter(title__icontains = search_str), many=True).data, status=status.HTTP_202_ACCEPTED)   
+   
+
+class ParseThingsView(APIView):
     permission_classes = [IsAdminUser,]
-    model_class = Movie
-    serializer_class = MovieSerializer
+    model_class = Thing
+    serializer_class = ThingSerializer
 
 
     def post(self, request, *args, **kwargs):

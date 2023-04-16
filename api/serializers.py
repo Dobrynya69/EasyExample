@@ -1,7 +1,14 @@
 from rest_framework import serializers
 from .models import *
 
-class MovieSerializer(serializers.ModelSerializer):
+
+class ThingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Movie
+        model = Thing
         fields = ('id', 'title', 'year', 'image')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('author', 'thing', 'text')
