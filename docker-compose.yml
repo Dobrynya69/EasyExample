@@ -17,6 +17,12 @@ services:
       - 8000:8000
     depends_on:
       - db
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-^*rf%+gh(o1xip2@hg&tss^x7v!1a!r=on_$)@(nkxrzm!(n5i
+      - CLOUD_NAME=dr7mqzlf9
+      - CLOUD_API_KEY=931525198692321
+      - CLOUD_API_SECRET=AqcRuZrFthzijMTJrjugtl-dH3o
 
 volumes:
   postgres_data:

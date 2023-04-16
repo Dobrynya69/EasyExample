@@ -3,9 +3,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-^*rf%+gh(o1xip2@hg&tss^x7v!1a!r=on_$)@(nkxrzm!(n5i'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = True
+DEBUG = int(os.environ.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = ['*']
 
@@ -106,9 +106,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dr7mqzlf9',
-    'API_KEY': '931525198692321',
-    'API_SECRET': 'AqcRuZrFthzijMTJrjugtl-dH3o'
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUD_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUD_API_SECRET')
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
