@@ -11,6 +11,7 @@ pillow = "*"
 django-cloudinary-storage = "*"
 django-cleanup = "*"
 djoser = "*"
+drf-yasg = "*"
 
 [dev-packages]
 
