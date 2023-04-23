@@ -6,6 +6,8 @@ from rest_framework import status
 import requests
 from .models import *
 from .serializers import *
+from django.core.paginator import Paginator
+from django.urls import reverse_lazy
 
 
 class CommentViewSet(ModelViewSet):
@@ -24,7 +26,6 @@ class CommentViewSet(ModelViewSet):
 
 
 class ThingViewSet(ModelViewSet):
-    queryset = Thing.objects.all()
     serializer_class = ThingSerializer
 
     def get_permissions(self):
@@ -35,9 +36,38 @@ class ThingViewSet(ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    def list(self, request, *args, **kwargs):
+
+    def get_queryset(self):
         search_str = self.request.GET.get('string', '')
-        return Response(self.serializer_class(Thing.objects.filter(title__icontains = search_str), many=True).data, status=status.HTTP_202_ACCEPTED)   
+        queryset = Thing.objects.filter(title__icontains = search_str)
+        return queryset
+    
+
+    def list(self, request, *args, **kwargs):
+        page = int(self.request.GET.get('page', 1))
+        queryset = self.get_queryset()
+        pagination = Paginator(object_list=queryset, per_page=10)
+        results = self.serializer_class(pagination.page(page), many=True).data
+        
+        previous = None
+        next = None
+        string = self.request.GET.get('string', '')
+
+        if(page > 1):
+            previous = reverse_lazy('thing') + f'?string={string}&page={page - 1}' 
+        if(page < pagination.num_pages):
+            next = reverse_lazy('thing') + f'?string={string}&page={page + 1}' 
+
+        return Response(
+            {
+                'results': results,
+                'previous_page': previous,
+                'next_page': next,
+                'page': page,
+                
+            }, 
+            status=status.HTTP_202_ACCEPTED
+        )   
    
 
 class ParseThingsView(APIView):
