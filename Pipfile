@@ -12,6 +12,7 @@ django-cloudinary-storage = "*"
 django-cleanup = "*"
 djoser = "*"
 drf-yasg = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
