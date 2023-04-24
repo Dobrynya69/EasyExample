@@ -27,7 +27,7 @@ class CommentViewSet(ModelViewSet):
 
 class ThingViewSet(ModelViewSet):
     serializer_class = ThingSerializer
-
+    per_page = 20
     def get_permissions(self):
         if self.action == "list" or self.action == "retrieve":
             permission_classes = [AllowAny, ]
@@ -46,7 +46,7 @@ class ThingViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
         page = int(self.request.GET.get('page', 1))
         queryset = self.get_queryset()
-        pagination = Paginator(object_list=queryset, per_page=10)
+        pagination = Paginator(object_list=queryset, per_page=self.per_page)
         results = self.serializer_class(pagination.page(page), many=True).data
         
         previous = None
