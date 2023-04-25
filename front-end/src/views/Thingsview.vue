@@ -7,7 +7,7 @@ var page = ref(1)
 export default{
     async setup(){
         const  url = computed(() => {
-            return ``
+            return `http://127.0.0.1:8000/api/thing?string=&page=${page.value}`
         });
         const { data } = await useFetch(url, {refetch: true}).json();
         return{
@@ -31,7 +31,7 @@ export default{
     <div class="container">
         <div class="container__row" >
             <div class="container__item" v-for="da in data.results">
-                <img :src="da.image" class="item__img" alt="">
+                <img :src="da.image" class="item__img" alt="" />
                 <div class="item__title">{{ da.title }}</div>
                 <div class="item__year">{{ da.year }}</div>
             </div>
