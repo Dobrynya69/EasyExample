@@ -78,12 +78,12 @@ class ParseThingsView(APIView):
 
     def post(self, request, *args, **kwargs):
         self.model_class.objects.all().delete()
-        movies_created = 0
-        providers = ['anigli', 'asura', 'cosmic', 'flame', 'luminous', 'realm', 'omega', 'surya']
+        anime_created = 0
+        providers = ['asura', 'flame', 'luminous', 'realm', 'omega', 'surya']
         current_provider = 0
         page = 1
         
-        while(movies_created <= 200 or current_provider > 7):
+        while(anime_created <= 300 and current_provider < 7):
             url = "https://manga-scrapper.p.rapidapi.com/webtoons"
             querystring = {"page": page, "limit": '20', "provider": providers[current_provider],}
             headers = {
@@ -106,7 +106,7 @@ class ParseThingsView(APIView):
                         serializer = self.serializer_class(data={'title': anime.get('title'), 'year': 69, 'image': anime.get('coverURL')})
                         if serializer.is_valid():
                             serializer.save()
-                            movies_created += 1
+                            anime_created += 1
                         else:
                             return Response({'message': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
