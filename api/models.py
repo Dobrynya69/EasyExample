@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 class Thing(models.Model):
     title = models.TextField()
     year = models.CharField(max_length=4)
-    image = models.URLField()
+    image = models.URLField(max_length=500)
 
     def __str__(self):
         return self.title

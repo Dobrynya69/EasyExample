@@ -79,23 +79,32 @@ class ParseThingsView(APIView):
     def post(self, request, *args, **kwargs):
         self.model_class.objects.all().delete()
         movies_created = 0
+        providers = ['anigli', 'asura', 'cosmic', 'flame', 'luminous', 'realm', 'omega', 'surya']
+        current_provider = 0
         page = 1
-        while(movies_created <= 100):
-            url = "https://moviesdatabase.p.rapidapi.com/titles/"
-            querystring = {"page": page, "startYear": 2015}
+        
+        while(movies_created <= 200 or current_provider > 7):
+            url = "https://manga-scrapper.p.rapidapi.com/webtoons"
+            querystring = {"page": page, "limit": '20', "provider": providers[current_provider],}
             headers = {
-                "X-RapidAPI-Key": "3ac8f1a79amsh99e49430e0195f2p15d2e7jsn0b9cc08b17b8",
-                "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com"
+                'content-type': 'application/octet-stream',
+                'X-RapidAPI-Key': '3ac8f1a79amsh99e49430e0195f2p15d2e7jsn0b9cc08b17b8',
+                'X-RapidAPI-Host': 'manga-scrapper.p.rapidapi.com'
             }
             response = requests.request("GET", url, headers=headers, params=querystring).json()
-            for movie in response['results']:
-                if movie['primaryImage'] is not None:
-                    serializer = self.serializer_class(data={'title': movie['titleText']['text'], 'year': movie['releaseYear']['year'], 'image': movie['primaryImage']['url']})
+            page += 1
+            for anime in response:
+                if (type(anime) == str):
+                    page = 0
+                    current_provider += 1
+                    break
+
+                else:
+                    serializer = self.serializer_class(data={'title': anime.get('title'), 'year': 69, 'image': anime.get('coverURL')})
                     if serializer.is_valid():
                         serializer.save()
                         movies_created += 1
                     else:
                         return Response({'message': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            page += 1
 
         return Response({'message': 'success'}, status=status.HTTP_201_CREATED)
