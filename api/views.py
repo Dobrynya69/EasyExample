@@ -93,18 +93,21 @@ class ParseThingsView(APIView):
             }
             response = requests.request("GET", url, headers=headers, params=querystring).json()
             page += 1
+
             for anime in response:
                 if (type(anime) == str):
                     page = 0
                     current_provider += 1
                     break
-
                 else:
-                    serializer = self.serializer_class(data={'title': anime.get('title'), 'year': 69, 'image': anime.get('coverURL')})
-                    if serializer.is_valid():
-                        serializer.save()
-                        movies_created += 1
-                    else:
-                        return Response({'message': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    try:
+                        exists = self.model_class.objects.get(title=anime.get('title'))
+                    except self.model_class.DoesNotExist:
+                        serializer = self.serializer_class(data={'title': anime.get('title'), 'year': 69, 'image': anime.get('coverURL')})
+                        if serializer.is_valid():
+                            serializer.save()
+                            movies_created += 1
+                        else:
+                            return Response({'message': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'message': 'success'}, status=status.HTTP_201_CREATED)
