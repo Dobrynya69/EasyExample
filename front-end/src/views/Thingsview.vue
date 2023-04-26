@@ -33,7 +33,6 @@ export default{
             <div class="menu__content"></div>
         </div>
         <div class="container__items">
-            <div class="items__title"><div class="item__text">List</div></div>
                 <div class="container__row">
                     <div class="container__item" v-for="da in data.results">
                         <img :src="da.image" class="item__img" alt="" />
@@ -49,7 +48,6 @@ export default{
 <style>
 .filter__menu {
     min-width: 300px;
-    height: 100vh;
     position: relative;
 }
 .menu__title div{
@@ -75,7 +73,7 @@ export default{
 }
 .container{
     display: flex;
-    
+    min-height: 100vh;
 }
 .items__title{
     width: 100%;
@@ -98,10 +96,8 @@ export default{
 .container__row{
     display: flex;
     flex-wrap: wrap;
-
     margin: 10px auto;
-    justify-content: start;
-    
+    justify-content: center;
 }
 .container__item{
     width: 250px;
