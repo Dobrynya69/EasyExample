@@ -20,8 +20,9 @@
 <style>
 .footer {
     background-color: #D9D9D9;
-    width: 100%;
-    height: 80px;
+    padding: 10px;
+    width: calc(100% - 20px);
+    height: 60px;
 }
 .footer__content {
     display: flex;
