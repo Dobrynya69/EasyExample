@@ -1,14 +1,20 @@
 from rest_framework import serializers
 from .models import *
 
-
-class ThingSerializer(serializers.ModelSerializer):
+class GenreSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Thing
-        fields = ('id', 'title', 'year', 'image')
+        model = Genre
+        fields = ('name',)
+
+
+class AnimeSerializer(serializers.ModelSerializer):
+    genres = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all(), many=True)
+    class Meta:
+        model = Anime
+        fields = ('id', 'title', 'image', 'description', 'genres')
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('author', 'thing', 'text')
+        fields = ('author', 'anime', 'text')
