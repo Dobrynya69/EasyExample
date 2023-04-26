@@ -25,8 +25,8 @@ class CommentViewSet(ModelViewSet):
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ThingViewSet(ModelViewSet):
-    serializer_class = ThingSerializer
+class AnimeViewSet(ModelViewSet):
+    serializer_class = AnimeSerializer
     per_page = 20
     def get_permissions(self):
         if self.action == "list" or self.action == "retrieve":
@@ -39,7 +39,7 @@ class ThingViewSet(ModelViewSet):
 
     def get_queryset(self):
         search_str = self.request.GET.get('string', '')
-        queryset = Thing.objects.filter(title__icontains = search_str)
+        queryset = Anime.objects.filter(title__icontains = search_str)
         return queryset
     
 
@@ -54,26 +54,43 @@ class ThingViewSet(ModelViewSet):
         string = self.request.GET.get('string', '')
 
         if(page > 1):
-            previous = reverse_lazy('thing') + f'?string={string}&page={page - 1}' 
+            previous = reverse_lazy('anime') + f'?string={string}&page={page - 1}' 
         if(page < pagination.num_pages):
-            next = reverse_lazy('thing') + f'?string={string}&page={page + 1}' 
+            next = reverse_lazy('anime') + f'?string={string}&page={page + 1}' 
 
         return Response(
             {
                 'results': results,
                 'previous_page': previous,
                 'next_page': next,
-                'page': page,
-                
+                'page': page, 
             }, 
             status=status.HTTP_202_ACCEPTED
         )   
    
 
-class ParseThingsView(APIView):
+class ParseAnimesView(APIView):
     permission_classes = [IsAdminUser,]
-    model_class = Thing
-    serializer_class = ThingSerializer
+    model_class = Anime
+    genre_class = Genre
+    serializer_class = AnimeSerializer
+    genre_serializer_class = GenreSerializer
+
+
+    def addGenres(self, genres):
+        if genres is None:
+            genres = ['No genres',]
+
+        for genre in genres:
+            try:
+                self.genre_class.objects.get(name=genre)
+            except self.genre_class.DoesNotExist:
+                serializer = self.genre_serializer_class(data={'name': genre})
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response({'message': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return genres
 
 
     def post(self, request, *args, **kwargs):
@@ -103,7 +120,11 @@ class ParseThingsView(APIView):
                     try:
                         exists = self.model_class.objects.get(title=anime.get('title'))
                     except self.model_class.DoesNotExist:
-                        serializer = self.serializer_class(data={'title': anime.get('title'), 'year': 69, 'image': anime.get('coverURL')})
+                        description = anime.get('synopsis')
+                        if description == '':
+                            description = "There is no description here"
+                        serializer = self.serializer_class(data={'title': anime.get('title'), 'image': anime.get('coverURL'), 'description': description, 'genres': self.addGenres(anime.get('genre'))})
+                        
                         if serializer.is_valid():
                             serializer.save()
                             anime_created += 1
