@@ -16,13 +16,20 @@ export default{
     },
     methods:{
         nextPage(){
-            page.value++;
-
+            if(page.value < this.data.max_page){
+                page.value++;
+            }
         },
         previousPage(){
             if(page.value > 1){
                 page.value--;
             }
+        },
+        gotoFirstPage(){
+            page.value = 1;
+        },
+        gotoLastPage(){
+            page.value = this.data.max_page;
         }
     }
 }
@@ -45,9 +52,17 @@ export default{
                         <img src="../../public/arrow.png" class="arrow__img_l">
                     </div>
                     <div class="pagination__btns">
-                        <button @click="previousPage()" class="pagination__btn" v-if="data.page - 1 > 0">{{ data.page - 1 }}</button>
+                        <button @click="gotoFirstPage()" class="pagination__btn" v-if="data.page != 1">1</button>
+                        
+                        <!-- page.value > 1 -->
+                        <!-- page.value < (max_page - 1) -->
+                        <!-- data.page != page.max_page -->
+
+                        <button @click="previousPage()" class="pagination__btn" v-if="data.page - 1 > 1">{{ data.page - 1 }}</button>
                         <button class="small__btn pagination__btn active">{{ data.page  }}</button>
-                        <button @click="nextPage()" class="pagination__btn" v-if="true">{{ data.page + 1 }}</button>
+                        <button @click="nextPage()" class="pagination__btn" v-if="data.page + 1 < data.max_page">{{ data.page + 1 }}</button>
+                        
+                        <button @click="gotoLastPage()" class="pagination__btn" v-if="data.page != data.max_page">{{ data.max_page }}</button>
                     </div>
                     <div @click="nextPage()" class="arrow">
                         <img src="../../public/arrow.png" class="arrow__img_r">
@@ -90,7 +105,7 @@ export default{
     cursor: pointer;
 }
 .pagination__btn {
-    font-size: 24px;
+    font-size: 20px;
     width: 30px;
     height: 30px;
     border-radius: 50%;
