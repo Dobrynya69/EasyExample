@@ -64,6 +64,7 @@ class AnimeViewSet(ModelViewSet):
                 'previous_page': previous,
                 'next_page': next,
                 'page': page, 
+                'max_page': pagination.num_pages
             }, 
             status=status.HTTP_202_ACCEPTED
         )   
