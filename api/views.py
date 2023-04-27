@@ -29,7 +29,7 @@ class AnimeViewSet(ModelViewSet):
     serializer_class = AnimeSerializer
     per_page = 20
     def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
+        if self.action == "list" or self.action == "retrieve" or self.action == "filter":
             permission_classes = [AllowAny, ]
         else:
             permission_classes = [IsAdminUser, ]
@@ -44,8 +44,8 @@ class AnimeViewSet(ModelViewSet):
     
 
     def list(self, request, *args, **kwargs):
-        page = int(self.request.GET.get('page', 1))
         queryset = self.get_queryset()
+        page = int(self.request.GET.get('page', 1))
         pagination = Paginator(object_list=queryset, per_page=self.per_page)
         results = self.serializer_class(pagination.page(page), many=True).data
         
@@ -68,6 +68,41 @@ class AnimeViewSet(ModelViewSet):
             }, 
             status=status.HTTP_202_ACCEPTED
         )   
+    
+    def filter(self, request, *args, **kwargs):  
+        queryset = self.get_queryset()
+
+        genres_data = self.request.POST.get('genres', [])
+        if type(genres_data) == str:
+            genres_data = [genres_data,]
+        if len(genres_data) > 0:
+            for genre in genres_data:
+                queryset = queryset.filter(genres = genre)
+
+        page = int(self.request.GET.get('page', 1))
+        pagination = Paginator(object_list=queryset, per_page=self.per_page)
+        results = self.serializer_class(pagination.page(page), many=True).data
+        
+        previous = None
+        next = None
+        string = self.request.GET.get('string', '')
+
+        if(page > 1):
+            previous = reverse_lazy('anime') + f'?string={string}&page={page - 1}' 
+        if(page < pagination.num_pages):
+            next = reverse_lazy('anime') + f'?string={string}&page={page + 1}' 
+
+        return Response(
+            {
+                'results': results,
+                'previous_page': previous,
+                'next_page': next,
+                'page': page, 
+                'max_page': pagination.num_pages,
+                'filter_data': {'genres': genres_data}
+            }, 
+            status=status.HTTP_202_ACCEPTED
+        )
    
 
 class ParseAnimesView(APIView):
