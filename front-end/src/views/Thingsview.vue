@@ -4,6 +4,13 @@ import { useFetch } from '@vueuse/core';
 
 var page = ref(1)
 
+function myStart(){
+    window.scroll({
+        top: 0,
+        left: 0,
+    })
+}
+
 export default{
     async setup(){
         const  url = computed(() => {
@@ -17,20 +24,24 @@ export default{
     methods:{
         nextPage(){
             if(page.value < this.data.max_page){
+                myStart();
                 page.value++;
             }
         },
         previousPage(){
             if(page.value > 1){
+                myStart();
                 page.value--;
             }
         },
         gotoFirstPage(){
+            myStart();
             page.value = 1;
         },
         gotoLastPage(){
+            myStart();
             page.value = this.data.max_page;
-        }
+        },
     }
 }
 </script>
@@ -40,7 +51,31 @@ export default{
 
         </div>
         <div class="main__content">
+            <div class="content__items">
+                <div class="content__item" v-for="item in data.results">
+                    <div class="item__img">
+                        <img :src="item.image" alt="image">
+                    </div>
+                    <div class="item__title">{{ item.title }}</div>
+                </div>
+            </div>
+            <div class="pagination">
+                <div @click="previousPage()" class="arrow">
+                    <img src="../../public/arrow.png" class="arrow__img_l">
+                </div>
+                <div class="pagination__btns">
+                    <button @click="gotoFirstPage()" class="pagination__btn" v-if="data.page != 1">1</button>
 
+                    <button @click="previousPage()" class="pagination__btn" v-if="data.page - 1 > 1">{{ data.page - 1 }}</button>
+                    <button class="small__btn pagination__btn active">{{ data.page }}</button>
+                    <button @click="nextPage()" class="pagination__btn " v-if="data.page + 1 < data.max_page">{{ data.page + 1 }}</button>
+                    
+                    <button @click="gotoLastPage()" class="pagination__btn" v-if="data.page != data.max_page">{{ data.max_page }}</button>
+                </div>
+                <div @click="nextPage()" class="arrow rotate">
+                    <img src="../../public/arrow.png" class="arrow__img_r">
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -48,84 +83,96 @@ export default{
 .main__container {
     display: flex;
     min-height: calc(100vh - 80px);
-
+    max-width: 1140px;
+    margin: 0px auto;
 }
 .main__filter {
-    width: 240px;
-    height: 100%;
+    width: 200px;
+    padding: 20px;
     background-color: #49B0B7;
 }
 .main__content {
-    width: calc(100% - 240px);
-    height: 100%;
-
+    width: calc(100% - 260px);
+    padding: 20px;
+    padding-right: 0px;
     background-color: rgba(19, 18, 18, 0.9);
 }
+.content__items {
+    display: flex;
+    flex-wrap: wrap;
+}
+.content__item {
+    width: calc(25% - 20px);
+    margin-bottom: 20px;
+    margin-right: 20px;
 
+}
+.item__img {
+    height: 300px;
+    width: 100%;
+}
+.item__img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.item__title {
+    margin-top: 20px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+}
 
 .pagination {
-    width: 100%;
-    padding: 0px 90px;
-    margin-top: 50px;
-    margin-bottom: 30px;
+    width: calc(100% - 20px);
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+}
+.arrow {
+    width: 40px;
+    height: 40px;
+    background-color: #49B0B7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+.arrow img{
+    transition: transform 300ms;
+    width: 20px;
+    height: 20px;
+}
+.rotate{
+    transform: rotate(180deg);
 }
 .pagination__btn {
-    font-size: 20px;
+    transition: background-color 300ms;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     border: none;
-    background-color: #54545494;
+    margin: 0px 7.5px;
+    background-color: #2C2C2C;
     color: #fff;
-    margin: 0px 5px;
+    font-size: 16px;
+}
+.active {
+    background-color: #386568;
+
+}
+.arrow img:hover{
+    transform: scale(1.3);
 }
 .pagination__btn:hover{
     cursor: pointer;
-}
-.pagination__btn.active{
-    background-color: #545454
-}
-.arrow__img_l {
-    width: 20px;
-    height: 20px;
-}
-.arrow__img_r {
-    width: 20px;
-    height: 20px;
-    transform: rotate(180deg);
-}
-.arrow{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 40px;
-    height: 40px;
-    background-color: #545454;
-    border-radius: 50%;
+    background-color: #444444;
 }
 .arrow:hover{
     cursor: pointer;
 }
+.pagination__btn.active:hover{
+    background-color: #386568;
+    cursor: auto;
+}
 </style>
-
-                <!-- <div class="pagination">
-                    <div @click="previousPage()" class="arrow">
-                        <img src="../../public/arrow.png" class="arrow__img_l">
-                    </div>
-                    <div class="pagination__btns">
-                        <button @click="gotoFirstPage()" class="pagination__btn" v-if="data.page != 1">1</button>
-
-                        <button @click="previousPage()" class="pagination__btn" v-if="data.page - 1 > 1">{{ data.page - 1 }}</button>
-                        <button class="small__btn pagination__btn active">{{ data.page  }}</button>
-                        <button @click="nextPage()" class="pagination__btn" v-if="data.page + 1 < data.max_page">{{ data.page + 1 }}</button>
-                        
-                        <button @click="gotoLastPage()" class="pagination__btn" v-if="data.page != data.max_page">{{ data.max_page }}</button>
-                    </div>
-                    <div @click="nextPage()" class="arrow">
-                        <img src="../../public/arrow.png" class="arrow__img_r">
-                    </div>
-                </div> -->

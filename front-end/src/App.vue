@@ -7,10 +7,6 @@ import Thingsview from './views/Thingsview.vue';
 </script>
 
 <template>
-    <div class="background">
-        <img src="../public/bg.png" alt="">
-        <div class="img__color"></div>
-    </div>
     <vHeader/>
         <div class="main">
             <Suspense>
@@ -48,6 +44,11 @@ import Thingsview from './views/Thingsview.vue';
     transition: 300ms;
 }
 a { color: inherit; } 
+.main{
+    position: relative;
+    z-index: 3;
+    padding-top: 80px;
+}
 .background{
     width: 100%;
     height: 100%;
@@ -60,6 +61,7 @@ a { color: inherit; }
     z-index: 2;
 }
 .background img{
+    object-fit: cover;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -67,11 +69,7 @@ a { color: inherit; }
     top: 0;
     z-index: 1;
 }
-.main{
+body{
     position: relative;
-    z-index: 3;
-    max-width: 1140px;
-    margin: 0px auto;
-    padding-top: 80px;
 }
 </style>

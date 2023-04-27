@@ -22,6 +22,8 @@
     background-color: #292929;
     width: 100%;
     height: 60px;
+    position: relative;
+    z-index: 10;
 }
 .footer__content {
     display: flex;
