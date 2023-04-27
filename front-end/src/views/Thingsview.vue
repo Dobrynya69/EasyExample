@@ -7,7 +7,7 @@ var page = ref(1)
 export default{
     async setup(){
         const  url = computed(() => {
-            return `http://127.0.0.1:8000/api/thing?string=&page=${page.value}`
+            return `http://127.0.0.1:8000/api/anime/?string=&page=${page.value}`
         });
         const { isFetching, data } = await useFetch(url, {refetch: true}).json();
         return{
@@ -17,11 +17,12 @@ export default{
     methods:{
         nextPage(){
             page.value++;
-            console.log(page.value);
+
         },
         previousPage(){
-            page.value--;
-            console.log(page.value);
+            if(page.value > 1){
+                page.value--;
+            }
         }
     }
 }
@@ -39,13 +40,71 @@ export default{
                         <div class="item__title"><div class="title__text">{{ da.title }}</div>
                     </div>
                 </div>
+                <div class="pagination">
+                    <div @click="previousPage()" class="arrow">
+                        <img src="../../public/arrow.png" class="arrow__img_l">
+                    </div>
+                    <div class="pagination__btns">
+                        <button @click="previousPage()" class="pagination__btn" v-if="data.page - 1 > 0">{{ data.page - 1 }}</button>
+                        <button class="small__btn pagination__btn active">{{ data.page  }}</button>
+                        <button @click="nextPage()" class="pagination__btn" v-if="true">{{ data.page + 1 }}</button>
+                    </div>
+                    <div @click="nextPage()" class="arrow">
+                        <img src="../../public/arrow.png" class="arrow__img_r">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
-        <!-- <button class="ff" @click="previousPage()">ЖМИ ЕСЛИ НЕ МУЖИК</button>
-        <button class="ff" @click="nextPage()">ЖМИ</button> -->
 <style>
+.pagination {
+    width: 100%;
+    padding: 0px 90px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.arrow__img_l {
+    width: 20px;
+    height: 20px;
+}
+.arrow__img_r {
+    width: 20px;
+    height: 20px;
+    transform: rotate(180deg);
+}
+.arrow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 40px;
+    height: 40px;
+    background-color: #545454;
+    border-radius: 50%;
+}
+.arrow:hover{
+    cursor: pointer;
+}
+.pagination__btn {
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: #54545494;
+    color: #fff;
+    margin: 0px 5px;
+}
+.pagination__btn:hover{
+    cursor: pointer;
+}
+.pagination__btn.active{
+    background-color: #545454
+}
 .filter__menu {
     min-width: 300px;
     position: relative;
@@ -100,7 +159,7 @@ export default{
 }
 .container__item{
     width: 250px;
-    height: 300px;
+    height: 320px;
     position: relative;
     margin: 10px 50px;
 
