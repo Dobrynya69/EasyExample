@@ -7,19 +7,20 @@ import Thingsview from './views/Thingsview.vue';
 </script>
 
 <template >
-    <vHeader/>
-    <div class="content">
-        <Suspense>
-            <template #default>
-                <RouterView/>
-            </template>
-            <template #fallback>
-                <div class="gg">Loading..</div>
-            </template>
-        </Suspense>
+    <div class="vse">
+        <vHeader/>
+        <div class="content">
+            <Suspense>
+                <template #default>
+                    <RouterView/>
+                </template>
+                <template #fallback>
+                    <div class="gg">Loading..</div>
+                </template>
+            </Suspense>
+        </div>
+        <vFooter/>
     </div>
-    <vFooter/>
-
 </template>
 
 <style>
@@ -31,6 +32,10 @@ import Thingsview from './views/Thingsview.vue';
     list-style: none;
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
+}
+.vse{
+    max-width: 1920px;
+    margin: 0px auto;
 }
 a { color: inherit; } 
 .content{
