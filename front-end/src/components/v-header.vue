@@ -15,20 +15,20 @@ export default{
 }
 </script>
 <template>
-<header class="header">
-    <div class="header__content">
-        <div ><router-link to="/" class="logo"  @click="this.signActive = true" >AThings</router-link></div>
-        <div class="sign" v-if="this.signActive">
-            <div class="sign-up"><router-link to="/sign-up"  @click="addActive()">SignUp</router-link></div>
-            <div class="slash">|</div>
-            <div class="sign-in"><router-link to="/sign-in" @click="addActive()">SignIn</router-link></div>
+    <header class="header">
+        <div class="header__content">
+            <div ><router-link to="/" class="logo"  @click="this.signActive = true" ><span class="blue-letter">A</span>Things</router-link></div>
+            <div class="sign" v-if="this.signActive">
+                <div class="sign-up"><router-link to="/sign-up"  @click="addActive()">Sign<span class="blue-letter">Up</span></router-link></div>
+                <div class="slash">|</div>
+                <div class="sign-in"><router-link to="/sign-in" @click="addActive()">Sign<span class="blue-letter">In</span></router-link></div>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 </template>
 <style>
 .header{
-    background-color: #d9d9d9d8;
+    background-color: #2C2C2C;
     width: 100%;
     height: 80px;
     position: fixed;
@@ -40,11 +40,14 @@ export default{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
     height: 80px;
-    max-width: calc(1770px - 20px);
-    padding: 0px 10px;
-    margin: 0px auto;
+    max-width: calc(1140px - 40px);
+    margin: 0 auto;
+    padding: 0px 20px;
+    color: #fff;
+}
+.blue-letter{
+    color: #49B0B7;
 }
 .logo {
     font-family: 'Encode Sans SC', sans-serif;

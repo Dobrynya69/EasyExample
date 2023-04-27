@@ -19,9 +19,8 @@
 </template>
 <style>
 .footer {
-    background-color: #D9D9D9;
-    padding: 10px;
-    width: calc(100% - 20px);
+    background-color: #292929;
+    width: 100%;
     height: 60px;
 }
 .footer__content {
@@ -30,17 +29,24 @@
     align-items: center;
     height: 100%;
     font-size: 20px;
+    padding: 0px 20px;
+    max-width: calc(1140px - 40px);
+    margin: 0 auto;
+    color: #fff;
 }
 .contacts {
     display: flex;
     align-items: center;
-}
+}   
 .contacts__text {
-    margin-right: 5px;
+    margin-right: 20px;
 }
 .contacts__data {
     display: flex;
     flex-direction: column;
     font-size: 16px;
+}
+.contacts__data div{
+    text-decoration: underline;
 }
 </style>
