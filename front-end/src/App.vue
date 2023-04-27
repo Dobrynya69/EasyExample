@@ -68,9 +68,10 @@ a { color: inherit; }
     z-index: 1;
 }
 .main{
-    max-width: 1920px;
+    position: relative;
+    z-index: 3;
+    max-width: 1140px;
     margin: 0px auto;
-    min-height: calc(100vh - 80px);
     padding-top: 80px;
 }
 </style>

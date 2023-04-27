@@ -35,11 +35,33 @@ export default{
 }
 </script>
 <template>
-    <div class="container">
-        
+    <div class="main__container">
+        <div class="main__filter">
+
+        </div>
+        <div class="main__content">
+
+        </div>
     </div>
 </template>
 <style>
+.main__container {
+    display: flex;
+    min-height: calc(100vh - 80px);
+
+}
+.main__filter {
+    width: 240px;
+    height: 100%;
+    background-color: #49B0B7;
+}
+.main__content {
+    width: calc(100% - 240px);
+    height: 100%;
+
+    background-color: rgba(19, 18, 18, 0.9);
+}
+
 
 .pagination {
     width: 100%;
@@ -49,6 +71,22 @@ export default{
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.pagination__btn {
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: #54545494;
+    color: #fff;
+    margin: 0px 5px;
+}
+.pagination__btn:hover{
+    cursor: pointer;
+}
+.pagination__btn.active{
+    background-color: #545454
 }
 .arrow__img_l {
     width: 20px;
@@ -71,22 +109,6 @@ export default{
 }
 .arrow:hover{
     cursor: pointer;
-}
-.pagination__btn {
-    font-size: 20px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: none;
-    background-color: #54545494;
-    color: #fff;
-    margin: 0px 5px;
-}
-.pagination__btn:hover{
-    cursor: pointer;
-}
-.pagination__btn.active{
-    background-color: #545454
 }
 </style>
 
