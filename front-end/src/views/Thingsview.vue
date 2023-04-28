@@ -54,7 +54,7 @@ export default{
     <div class="main__container">
         <div class="main__filter">
             <div class="search">
-                <input type="text" v-model="searchString.value" placeholder="Search...">
+                <input type="text" placeholder="Search...">
                 <img src="../../public/lupa.png" alt="lupa">
             </div>
             <div class="filter__content">
