@@ -7,6 +7,7 @@ import requests
 from .models import *
 from .serializers import *
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.urls import reverse_lazy
 
 
@@ -24,10 +25,24 @@ class CommentViewSet(ModelViewSet):
         else:
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+class GenreView(APIView):
+    model_class = Genre
+    serializer_class = GenreSerializer
+
+    def get_queryset(self):
+        return self.model_class.objects.filter(~Q(name="No genres"))
+    
+
+    def get(self, request, *args, **kwargs):
+        results = self.serializer_class(self.get_queryset(), many=True).data
+        return Response({'genres': results}, status=status.HTTP_202_ACCEPTED) 
+
 
 class AnimeViewSet(ModelViewSet):
     serializer_class = AnimeSerializer
     per_page = 20
+
+
     def get_permissions(self):
         if self.action == "list" or self.action == "retrieve" or self.action == "filter":
             permission_classes = [AllowAny, ]
@@ -69,9 +84,9 @@ class AnimeViewSet(ModelViewSet):
             status=status.HTTP_202_ACCEPTED
         )   
     
+    
     def filter(self, request, *args, **kwargs):  
         queryset = self.get_queryset()
-
         genres_data = self.request.POST.get('genres', [])
         if type(genres_data) == str:
             genres_data = [genres_data,]
