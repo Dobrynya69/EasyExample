@@ -19,7 +19,7 @@
 </template>
 <style>
 .footer {
-    background-color: #292929;
+    background-color: #2C2C2C;
     width: 100%;
     height: 60px;
     position: relative;

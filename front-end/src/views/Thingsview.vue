@@ -48,12 +48,27 @@ export default{
 <template>
     <div class="main__container">
         <div class="main__filter">
+            <div class="search">
+                <input type="text" placeholder="Search...">
+                <img src="../../public/lupa.png" alt="lupa">
+            </div>
+            <div class="filter__content">
+                <form action="#" class="filter__form">
+                    <div class="checkbox__block">
+                        <label class="block__label">
+                            Some genre
+                            <input type="checkbox">
+                        </label>
 
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="main__content">
             <div class="content__items">
                 <div class="content__item" v-for="item in data.results">
                     <div class="item__img">
+                        <div :class="{blackshit: isLoading}"></div>
                         <img :src="item.image" alt="image">
                     </div>
                     <div class="item__title">{{ item.title }}</div>
@@ -80,6 +95,9 @@ export default{
     </div>
 </template>
 <style>
+
+
+
 .main__container {
     display: flex;
     min-height: calc(100vh - 80px);
@@ -87,8 +105,61 @@ export default{
     margin: 0px auto;
 }
 .main__filter {
-    width: 200px;
+    width: 250px;
+    background-color: #49B0B7;
+}
+.search {
+    width: calc(100% - 2px);
+    height: 55px;
+    display: flex;
+    background-color: #2C2C2C;
+    border: solid 1px #49B0B7;
+}
+.filter__content{
     padding: 20px;
+}
+.search input{
+    font-family: 'Roboto', sans-serif;
+    width: calc(100% - 20px);
+    background-color: #2C2C2C;
+    border: none;
+    padding: 20px;
+    padding-right: 0px;
+    font-size: 20px;
+    color:#fff;
+}
+.search input:focus{
+    border: none;
+    outline: none;
+}
+::-webkit-input-placeholder {
+    color:#fff;
+}
+.filter__form {
+    background-color: #2C2C2C;
+    padding: 20px;
+}
+
+.block__label{
+    font-size: 20px;
+    color: #fff;
+    display: grid;
+    grid-template-columns: 1fr 20px;
+
+}
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #4D4D4D;
+    transform: translateY(2.8px);
+    display: grid;
+    place-content: center;
+    transition: 120ms transform ease-in-out;
+}
+input[type="checkbox"]:checked {
     background-color: #49B0B7;
 }
 .main__content {
@@ -110,11 +181,20 @@ export default{
 .item__img {
     height: 300px;
     width: 100%;
+    position: relative;
 }
 .item__img img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+.blackshit{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .item__title {
     margin-top: 20px;
