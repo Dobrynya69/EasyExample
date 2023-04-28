@@ -1,8 +1,10 @@
 <script>
 import { computed, mergeProps, ref } from 'vue';
 import { useFetch } from '@vueuse/core';
+import Filter from '../components/v-filter.vue'
 
-var page = ref(1)
+var page = ref(1);
+var searchString = ref()
 
 function myStart(){
     window.scroll({
@@ -20,6 +22,9 @@ export default{
         return{
             data, isFetching
         }
+    },
+    components:{
+        Filter,
     },
     methods:{
         nextPage(){
@@ -49,26 +54,18 @@ export default{
     <div class="main__container">
         <div class="main__filter">
             <div class="search">
-                <input type="text" placeholder="Search...">
+                <input type="text" v-model="searchString.value" placeholder="Search...">
                 <img src="../../public/lupa.png" alt="lupa">
             </div>
             <div class="filter__content">
-                <form action="#" class="filter__form">
-                    <div class="checkbox__block">
-                        <label class="block__label">
-                            Some genre
-                            <input type="checkbox">
-                        </label>
-
-                    </div>
-                </form>
+                <Filter />
             </div>
         </div>
         <div class="main__content">
             <div class="content__items">
                 <div class="content__item" v-for="item in data.results">
                     <div class="item__img">
-                        <div :class="{blackshit: isLoading}"></div>
+                        <!-- <div :class="{blackshit: isLoading}"></div> -->
                         <img :src="item.image" alt="image">
                     </div>
                     <div class="item__title">{{ item.title }}</div>
@@ -135,33 +132,7 @@ export default{
 ::-webkit-input-placeholder {
     color:#fff;
 }
-.filter__form {
-    background-color: #2C2C2C;
-    padding: 20px;
-}
 
-.block__label{
-    font-size: 20px;
-    color: #fff;
-    display: grid;
-    grid-template-columns: 1fr 20px;
-
-}
-input[type="checkbox"] {
-    -webkit-appearance: none;
-    appearance: none;
-    margin: 0;
-    width: 20px;
-    height: 20px;
-    background-color: #4D4D4D;
-    transform: translateY(2.8px);
-    display: grid;
-    place-content: center;
-    transition: 120ms transform ease-in-out;
-}
-input[type="checkbox"]:checked {
-    background-color: #49B0B7;
-}
 .main__content {
     width: calc(100% - 260px);
     padding: 20px;
