@@ -4,7 +4,7 @@ import { useFetch } from '@vueuse/core';
 import Filter from '../components/v-filter.vue'
 
 var page = ref(1);
-var searchString = ref()
+var searchString = ref('')
 
 function myStart(){
     window.scroll({
@@ -16,7 +16,7 @@ function myStart(){
 export default{
     async setup(){
         const  url = computed(() => {
-            return `http://127.0.0.1:8000/api/anime/?string=&page=${page.value}`
+            return `http://127.0.0.1:8000/api/anime/?string=${searchString.value}&page=${page.value}`
         });
         const { isFetching, data } = await useFetch(url, {refetch: true}).json();
         return{
@@ -47,6 +47,9 @@ export default{
             myStart();
             page.value = this.data.max_page;
         },
+        search(){
+            chlen = document.querySelector('#hui');
+        }
     }
 }
 </script>
@@ -54,8 +57,8 @@ export default{
     <div class="main__container">
         <div class="main__filter">
             <div class="search">
-                <input type="text" placeholder="Search...">
-                <img src="../../public/lupa.png" alt="lupa">
+                <input type="text" placeholder="Search..." id="search_input">
+                <img src="../../public/lupa.png" alt="lupa" @click="search()">
             </div>
             <div class="filter__content">
                 <Filter />

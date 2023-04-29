@@ -7,7 +7,7 @@ from rest_framework import permissions
 schema_view = get_schema_view(
     openapi.Info(
         title="Example API",
-        default_version="v0.0.1",
+        default_version="v0.2.0",
         description="A sample API for example",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="hello@example.com"),
