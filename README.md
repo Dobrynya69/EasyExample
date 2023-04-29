@@ -1,2 +1,2 @@
 # Example
-Хочу алмазов
+Repository to improve our knowleges
