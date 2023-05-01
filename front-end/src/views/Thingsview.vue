@@ -47,18 +47,29 @@ export default{
             myStart();
             page.value = this.data.max_page;
         },
+<<<<<<< HEAD
         search(){
             chlen = document.querySelector('#hui');
+=======
+        setSearchString(){
+            console.log(document.querySelector('#searchString').value);
+            searchString.value = document.querySelector('#searchString').value;
+>>>>>>> 9162d5d2fc91e71060d248ddd125060f74aad41b
         }
     }
 }
-</script>
+</script>   
 <template>
     <div class="main__container">
         <div class="main__filter">
             <div class="search">
+<<<<<<< HEAD
                 <input type="text" placeholder="Search..." id="search_input">
                 <img src="../../public/lupa.png" alt="lupa" @click="search()">
+=======
+                <input id="searchString" type="text" placeholder="Search...">
+                <img @click="setSearchString()" src="../../public/lupa.png" alt="lupa">
+>>>>>>> 9162d5d2fc91e71060d248ddd125060f74aad41b
             </div>
             <div class="filter__content">
                 <Filter />
