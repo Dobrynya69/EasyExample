@@ -52,3 +52,19 @@ class AnimeDetailAPIViewTests(APITestCase):
     def test_get_anime_detail(self):
         response = self.client.get(self.anime_detail_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GenreListViewTests(APITestCase):
+    genre_list_url = reverse('genre')
+    model_class = Genre
+
+
+    def setUp(self):
+        self.model_class.objects.create(name="genre1")
+        self.model_class.objects.create(name="genre2")
+        self.model_class.objects.create(name="genre3")
+
+
+    def test_get_anime_detail(self):
+        response = self.client.get(self.genre_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
