@@ -1,27 +1,73 @@
 <script setup>
-import { computed, onServerPrefetch, ref, onMounted } from 'vue';
-import {useRoute, RouterView} from 'vue-router'
+import { computed, onServerPrefetch, ref, onMounted, onUpdated, onBeforeUpdate } from 'vue';
 import Filter from '../components/v-filter.vue'
-import ItemsList from '../components/v-ItemsList.vue'
 import SearchString from '../components/v-SearchString.vue';
+import ItemsListItem from '../components/v-ItemsListItem.vue';
+import api from '../api';
+
+const anim = ref({});
+const searchText = ref("");
+onBeforeUpdate(async () => {
+    anim.value = await api.searchAnime(searchText.value);
+})
+onMounted(async () => {
+    setDefaultImg()
+    anim.value = await api.getAnime(null);
+})
+function myStart(){
+
+}
+function setDefaultImg(){
+    const allImg = document.querySelectorAll(".anim__image")       
+        for(let i = 0; i < allImg.length; i++){
+            allImg[i].src = "../../public/load.png"
+        }
+}
+async function setPage(newPage){
+    if(newPage > 0 || newPage <= anim.max_page){
+        window.scroll({
+        top: 0,
+        left: 0,
+        })
+        const props = {page: newPage}
+        setDefaultImg();
+        anim.value = await api.getAnime(props);
+    }
+}
+
 </script>   
 <template>
     <div class="main__container">
         <div class="main__filter">
-            <SearchString/>
+            <SearchString v-model="searchText"/>
             <div class="filter__content">
                 <Filter />
             </div>
         </div>
         <div class="main__content">
-            <Suspense>
-                <template #default>
-                    <ItemsList/>
-                </template>
-                <template #fallback>
-                    Loading....
-                </template>
-            </Suspense>
+            <div class="content__items">
+                <ItemsListItem 
+                v-for="item in anim.results" 
+                :item="item" 
+            />
+        </div>
+        <div class="pagination">
+            <div @click="setPage(anim.page - 1)" class="arrow">
+                <img src="../../public/arrow.png" class="arrow__img_l">
+            </div>
+            <div class="pagination__btns">
+                <div @click="setPage(1)"  class="pagination__btn" v-if="anim.page != 1">1</div>
+
+                <div @click="setPage(anim.page - 1)" class="pagination__btn" v-if="anim.page - 1 > 1">{{ anim.page - 1 }}</div>
+                <div class="small__btn pagination__btn active">{{ anim.page }}</div>
+                <div @click="setPage(anim.page + 1)" class="pagination__btn " v-if="anim.page + 1 < anim.max_page">{{ anim.page + 1 }}</div>
+                
+                <div @click="setPage(anim.max_page)" class="pagination__btn" v-if="anim.page != anim.max_page">{{ anim.max_page }}</div>
+            </div>
+            <div @click="setPage(anim.page + 1)" class="arrow rotate">
+                <img src="../../public/arrow.png" class="arrow__img_r">
+            </div>
+            </div>
         </div>
     </div>
 </template>
