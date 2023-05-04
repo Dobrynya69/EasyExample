@@ -12,6 +12,7 @@ import Thingsview from './views/Thingsview.vue';
             <Suspense>
                 <template #default>
                     <RouterView/>
+                    <!-- <Thingsview/> -->
                 </template>
                 <template #fallback>
                     <div class="gg">Loading..</div>

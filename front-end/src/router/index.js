@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Thingsview from '../views/Thingsview.vue'
+import ItemsList from '../components/v-ItemsList.vue'
 import SignUpview from '../views/SignUpview.vue'
 import SignInview from '../views/SignInview.vue'
 
@@ -7,10 +8,12 @@ import SignInview from '../views/SignInview.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {name: 'Things', path: '/', component: Thingsview },
-    {name: 'SignUp', path: '/sign-up', component: SignUpview },
-    {name: 'SignIn', path: '/sign-in', component: SignInview },
+    {
+      name: 'Things', 
+      path: '/', 
+      component: Thingsview,
+    },
   ]
 })
 
-export default router
+export default router 

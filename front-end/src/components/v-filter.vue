@@ -1,23 +1,18 @@
-<script>
+<script setup>
 import { useFetch } from '@vueuse/core';
-import { computed, mergeProps, ref } from 'vue';
+import { computed, mergeProps, ref, onMounted } from 'vue';
+import api from '../api';
 
-export default{
-    async setup(){
-        const  genresR = computed(() => {
-            return `http://127.0.0.1:8000/api/genre/`
-        });
-        const { data } = await useFetch(genresR).json();
-        return{
-            data
-        }
-    },
-}
+const genresList = ref({});
+
+onMounted(async () => {
+    genresList.value = await api.getGenres();
+})
 </script>
 <template>
     <form action="#" class="filter__form">
         <div class="geners__list">
-            <div class="checkbox__block" v-for="item in data.genres">
+            <div class="checkbox__block" v-for="item in genresList.genres">
                 <label class="block__label">
                     <div class="label__text">{{ item.name }}</div> 
                     <input type="checkbox">
