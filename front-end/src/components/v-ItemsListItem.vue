@@ -5,23 +5,17 @@ const props = defineProps({
         type: Object
     },
 })
-function myStart(){
-    window.scroll({
-        top: 0,
-        left: 0,
-    })
-}
 </script>
 
 <template>
     <div class="content__item" >
         <div class="item__img">
-            <img :src="item.image" alt="image">
+            <img class="anim__image" :src="item.image" alt="image">
         </div>
         <div class="item__title">{{ item.title }}</div>
     </div>
 </template>
-<style>
+<style scoped>
 .content__item {
     width: calc(25% - 20px);
     margin-bottom: 20px;
@@ -32,7 +26,7 @@ function myStart(){
     width: 100%;
     position: relative;
 }
-.item__img img{
+.anim__image{
     width: 100%;
     height: 100%;
     object-fit: cover;

@@ -1,47 +1,9 @@
 <script setup>
-import ItemsListItem from './v-ItemsListItem.vue';
-import { defineProps, ref, onMounted } from 'vue'
-import {useRoute} from 'vue-router'
-import api from '../api';
 
-
-const anim = ref({});
-onMounted(async () => {
-    anim.value = await api.getAnime(null);
-})
-async function setPage(newPage){
-    if(newPage > 0 || newPage <= anim.max_page){
-        const props = {page: newPage}
-        console.log(props)
-        anim.value = await api.getAnime(props);
-    }
-}
 
 </script>
 <template>
-    <div class="content__items">
-        <ItemsListItem 
-        v-for="item in anim.results" 
-        :item="item" 
-    />
-    </div>
-    <div class="pagination">
-        <div @click="setPage(anim.page - 1)" class="arrow">
-            <img src="../../public/arrow.png" class="arrow__img_l">
-        </div>
-        <div class="pagination__btns">
-            <div @click="setPage(1)"  class="pagination__btn" v-if="anim.page != 1">1</div>
 
-            <div @click="setPage(anim.page - 1)" class="pagination__btn" v-if="anim.page - 1 > 1">{{ anim.page - 1 }}</div>
-            <div class="small__btn pagination__btn active">{{ anim.page }}</div>
-            <div @click="setPage(anim.page + 1)" class="pagination__btn " v-if="anim.page + 1 < anim.max_page">{{ anim.page + 1 }}</div>
-            
-            <div @click="setPage(anim.max_page)" class="pagination__btn" v-if="anim.page != anim.max_page">{{ anim.max_page }}</div>
-        </div>
-        <div @click="setPage(anim.page + 1)" class="arrow rotate">
-            <img src="../../public/arrow.png" class="arrow__img_r">
-        </div>
-    </div>
 </template>
 <style>
 .content__items {

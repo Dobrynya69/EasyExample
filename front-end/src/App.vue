@@ -9,15 +9,7 @@ import Thingsview from './views/Thingsview.vue';
 <template>
     <vHeader/>
         <div class="main">
-            <Suspense>
-                <template #default>
-                    <RouterView/>
-                    <!-- <Thingsview/> -->
-                </template>
-                <template #fallback>
-                    <div class="gg">Loading..</div>
-                </template>
-            </Suspense>
+            <RouterView/>
         </div>
     <vFooter/>
 </template>

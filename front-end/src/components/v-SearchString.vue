@@ -1,9 +1,18 @@
 <script setup>
+import { computed } from 'vue'
+
+defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
 
 </script>
 <template>
     <div class="search">
-        <input id="searchString" type="text" placeholder="Search...">
+        <input
+            type="text"
+            placeholder="Search..."
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+        >    
         <img src="../../public/lupa.png" alt="lupa">
     </div>
 </template>
