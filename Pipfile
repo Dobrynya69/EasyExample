@@ -13,6 +13,7 @@ django-cleanup = "*"
 djoser = "*"
 drf-yasg = "*"
 django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
