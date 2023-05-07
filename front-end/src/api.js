@@ -6,16 +6,26 @@ export const HTTP = axios.create({
 });
 
 export default{
-    async getAnime(props){
+    async getAnime(page, searchString){
         try{
-            if(props === null){
+            console.log(searchString)
+            if(page === null && searchString === undefined){
                 const respons = await HTTP.get('/anime/');
+                return respons.data;
+            }
+            else if(page !== null && searchString === undefined){
+                const respons = await HTTP.get('/anime/',{
+                    params: {
+                        page: page,
+                    }
+                });
                 return respons.data;
             }
             else{
                 const respons = await HTTP.get('/anime/',{
                     params: {
-                        page: props.page,
+                        page: page,
+                        string: searchString,
                     }
                 });
                 return respons.data;
@@ -23,14 +33,6 @@ export default{
         } catch(e){
             console.log(e + "!!!");
         }
-    },
-    async searchAnime(searchString){
-        const respons = await HTTP.get('/anime/',{
-            params: {
-                string: searchString,
-            }
-        });
-        return respons.data;
     },
     async getGenres(){
         try{

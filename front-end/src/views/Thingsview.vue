@@ -1,45 +1,55 @@
 <script setup>
-import { computed, onServerPrefetch, ref, onMounted, onUpdated, onBeforeUpdate } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
 import Filter from '../components/v-filter.vue'
 import SearchString from '../components/v-SearchString.vue';
 import ItemsListItem from '../components/v-ItemsListItem.vue';
 import api from '../api';
 
+const router = useRouter()
+const route = useRoute()
 const anim = ref({});
 const searchText = ref("");
-onBeforeUpdate(async () => {
-    anim.value = await api.searchAnime(searchText.value);
-})
+
 onMounted(async () => {
     setDefaultImg()
-    anim.value = await api.getAnime(null);
+    anim.value = await api.getAnime(null, searchText.value);
+    searchText.value = route.query.searchString;
 })
-function myStart(){
-
-}
-function setDefaultImg(){
-    const allImg = document.querySelectorAll(".anim__image")       
-        for(let i = 0; i < allImg.length; i++){
-            allImg[i].src = "../../public/load.png"
-        }
-}
-async function setPage(newPage){
+watch( searchText, async () =>{
+    if(searchText.value !== undefined){
+        anim.value = await api.getAnime(anim.page, searchText.value);
+    }
+});
+const setPage = async (newPage) =>{
     if(newPage > 0 || newPage <= anim.max_page){
-        window.scroll({
+        myStart();
+        setDefaultImg();
+        anim.value = await api.getAnime(newPage, searchText.value);
+    }
+}
+const handleChange = async (page) =>{
+    router.push({query: { searchString: searchText.value }});
+
+    anim.value = await api.getAnime(page, searchText.value);
+}
+const myStart = () =>{
+    window.scroll({
         top: 0,
         left: 0,
         })
-        const props = {page: newPage}
-        setDefaultImg();
-        anim.value = await api.getAnime(props);
-    }
 }
-
+const setDefaultImg = () =>{
+    const allImg = document.querySelectorAll(".anim__image")       
+        for(let i = 0; i < allImg.length; i++){
+            allImg[i].src = "../../public/load.png";
+        }
+}
 </script>   
 <template>
     <div class="main__container">
         <div class="main__filter">
-            <SearchString v-model="searchText"/>
+            <SearchString @change="handleChange(anim.page)" v-model="searchText"/>
             <div class="filter__content">
                 <Filter />
             </div>
