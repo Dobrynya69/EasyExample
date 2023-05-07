@@ -87,7 +87,7 @@ class AnimeViewSet(ModelViewSet):
     
     def filter(self, request, *args, **kwargs):  
         queryset = self.get_queryset()
-        genres_data = self.request.POST.get('genres', [])
+        genres_data = request.data.get('genres', [])
         if type(genres_data) == str:
             genres_data = [genres_data,]
         if len(genres_data) > 0:
