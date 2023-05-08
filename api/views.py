@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 
 
+#A view for creating comments to some title. Access only to lged in users.
 class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -25,6 +26,8 @@ class CommentViewSet(ModelViewSet):
         else:
             return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
+#A view for getting a list of all genres. Access only to anybody.
 class GenreView(APIView):
     model_class = Genre
     serializer_class = GenreSerializer
@@ -38,6 +41,7 @@ class GenreView(APIView):
         return Response({'genres': results}, status=status.HTTP_202_ACCEPTED) 
 
 
+#A view set for creating, deletation, editing, filtering, anime. Access depends on request.
 class AnimeViewSet(ModelViewSet):
     serializer_class = AnimeSerializer
     per_page = 20
@@ -119,7 +123,7 @@ class AnimeViewSet(ModelViewSet):
             status=status.HTTP_202_ACCEPTED
         )
    
-
+#A view for parse anime list api. Access only to admin.
 class ParseAnimesView(APIView):
     permission_classes = [IsAdminUser,]
     model_class = Anime
