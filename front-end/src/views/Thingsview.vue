@@ -10,11 +10,10 @@ const route = useRoute()
 
 const anim = ref({});
 const genresList = ref({});
-const searchText = ref("");
 const filterList = ref([]);
+const searchText = ref("");
 
 onMounted(async () => {
-    
     setDefaultImg()
     anim.value = await api.getAnime(null, searchText.value);
     genresList.value = await api.getGenres();
@@ -26,16 +25,25 @@ watch( searchText, async () =>{
     }
 });
 const setPage = async (newPage) =>{
-    if(newPage > 0 || newPage <= anim.max_page){
-        myStart();
-        setDefaultImg();
-        anim.value = await api.getAnime(newPage, searchText.value);
+    if(filterList.value.length > 0){
+        if(newPage > 0 || newPage <= anim.max_page){
+            myStart();
+            setDefaultImg();
+            anim.value = await api.getAnimeWithGenres(filterList.value, newPage);
+        }
+    }
+    else{
+        if(newPage > 0 || newPage <= anim.max_page){
+            myStart();
+            setDefaultImg();
+            anim.value = await api.getAnime(newPage, searchText.value);
+        }
     }
 }
 const filterData = async () => {
-    // myStart();
-    // setDefaultImg();
-    anim.value = await api.getAnimeWithGenres(filterList.value);
+    myStart();
+    setDefaultImg();
+    anim.value = await api.getAnimeWithGenres(filterList.value, 1);
 }
 const handleChange = async (page) =>{
     router.push({query: { searchString: searchText.value }});
@@ -56,7 +64,6 @@ const setDefaultImg = () =>{
 }
 </script>   
 <template>
-    <div class="cal">{{ filterList }}</div>
     <div class="main__container">
         <div class="main__filter">
             <SearchString @change="handleChange(anim.page)" v-model="searchText"/>

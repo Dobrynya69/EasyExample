@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "./config";
+import { computed, ref } from 'vue'
 
 export const HTTP = axios.create({
     baseURL: config.MOCK,
@@ -8,7 +9,6 @@ export const HTTP = axios.create({
 export default{
     async getAnime(page, searchString){
         try{
-            console.log(searchString)
             if(page === null && searchString === undefined){
                 const respons = await HTTP.get('/anime/');
                 return respons.data;
@@ -34,21 +34,20 @@ export default{
             console.log(e + "!!!");
         }
     },
-    async getAnimeWithGenres(genersList){
+    async getAnimeWithGenres(genersList, page){
         try{
-            console.log("sosi")
-            const sos = [];
-            console.log("sosi2")
-            for(var i = 0; i < genersList.length; i++){
-                sos.push(genersList[i]);
-                console.log("sosi3")
-            }   
-            console.log("sosi4")
-            console.log(sos[0])
-            const respons = await axios.post('http://127.0.0.1:8000/api/anime/',{'genres': 'sos'});
-            console.log("sosi5")
-            console.log(respons.data)
-            return respons.data;
+            if(genersList.length > 0){
+                const listData = [];
+                for(var i = 0; i < genersList.length; i++){
+                    listData.push(genersList[i]);
+                }
+                const url = ref(computed(() => `http://127.0.0.1:8000/api/anime/?page=${page}`));
+                console.log(url.value);
+                const respons = await axios.post(url.value,{
+                    'genres': listData,
+                });
+                return respons.data;
+            }
         } catch(e){
             console.log(e + "!!!");
         }
