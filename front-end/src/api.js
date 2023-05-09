@@ -34,16 +34,23 @@ export default{
             console.log(e + "!!!");
         }
     },
-    async getAnimeWithGenres(genersList, page){
+    async getAnimeWithGenres(genersList, page, searchString){
         try{
             if(genersList.length > 0){
                 const listData = [];
                 for(var i = 0; i < genersList.length; i++){
                     listData.push(genersList[i]);
                 }
-                const url = ref(computed(() => `http://127.0.0.1:8000/api/anime/?page=${page}`));
-                console.log(url.value);
-                const respons = await axios.post(url.value,{
+                var mainUrl;
+                if(searchString !== undefined){
+                    const url = ref(computed(() => `http://127.0.0.1:8000/api/anime/?string=${searchString}&page=${page}`));
+                    mainUrl = url.value;
+                }
+                else{
+                    const url = ref(computed(() => `http://127.0.0.1:8000/api/anime/?page=${page}`));
+                    mainUrl = url.value;
+                }
+                const respons = await axios.post(mainUrl,{
                     'genres': listData,
                 });
                 return respons.data;

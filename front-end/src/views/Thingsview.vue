@@ -14,7 +14,7 @@ const filterList = ref([]);
 const searchText = ref("");
 
 onMounted(async () => {
-    setDefaultImg()
+    // setDefaultImg()
     anim.value = await api.getAnime(null, searchText.value);
     genresList.value = await api.getGenres();
     searchText.value = route.query.searchString;
@@ -29,7 +29,7 @@ const setPage = async (newPage) =>{
         if(newPage > 0 || newPage <= anim.max_page){
             myStart();
             setDefaultImg();
-            anim.value = await api.getAnimeWithGenres(filterList.value, newPage);
+            anim.value = await api.getAnimeWithGenres(filterList.value, newPage, searchText.value);
         }
     }
     else{
@@ -41,14 +41,20 @@ const setPage = async (newPage) =>{
     }
 }
 const filterData = async () => {
-    myStart();
-    setDefaultImg();
-    anim.value = await api.getAnimeWithGenres(filterList.value, 1);
+    if(filterList.value.length > 0){
+        myStart();
+        // setDefaultImg();
+        anim.value = await api.getAnimeWithGenres(filterList.value, 1, searchText.value);
+    }
 }
 const handleChange = async (page) =>{
     router.push({query: { searchString: searchText.value }});
-
-    anim.value = await api.getAnime(page, searchText.value);
+    if(filterList.value.length > 0){
+        anim.value = await api.getAnimeWithGenres(filterList.value, 1, searchText.value);
+    }
+    else{
+        anim.value = await api.getAnime(page, searchText.value);
+    }
 }
 const myStart = () =>{
     window.scroll({
