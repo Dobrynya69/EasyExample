@@ -10,6 +10,7 @@ const props = defineProps({
 <template>
     <div class="content__item" >
         <div class="item__img">
+            <div class="black-some"><img class="some-img" src="../../public/info.png" alt="lupa"></div>
             <img class="anim__image" :src="item.image" alt="image">
         </div>
         <div class="item__title">{{ item.title }}</div>
@@ -21,11 +22,34 @@ const props = defineProps({
     margin-bottom: 20px;
     margin-right: 20px;
 }
+.black-some {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    opacity: 0;
+    transition: all 300ms;
+}
+.black-some > *{
+    position: absolute;
+    transition: all 300ms;
+    left: 50%;
+    top: 50%;
+    transform: scale(0) translate(-50%, -50%);
+}
+.black-some:hover {
+    opacity: 1;
+}
+.black-some:hover .some-img{
+    transform: scale(1)  translate(-50%, -50%);
+}
+
 .item__img {
     height: 300px;
     width: 100%;
     position: relative;
 }
+
 .anim__image{
     width: 100%;
     height: 100%;

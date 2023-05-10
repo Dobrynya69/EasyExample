@@ -75,6 +75,7 @@ const setDefaultImg = () =>{
             <SearchString @change="handleChange(anim.page)" v-model="searchText"/>
             <div class="filter__content">
                 <form  class="filter__form" @submit.prevent>
+                    <button @click="" class="reset__btn">Reset</button>
                     <div class="geners__list">
                         <div class="checkbox__block" v-for="item in genresList.genres">
                             <label class="block__label">
@@ -189,12 +190,36 @@ input[type="checkbox"]:checked {
 .sort__btn{
     width: 100%;
     margin-top: 20px;
+    transition: all 300ms;
 
     font-size: 24px;
     font-family: 'Encode Sans SC', sans-serif;
-    background-color: #2C2C2C;
     color: #fff;
-    padding: 12px 0px;
-    border: none;
+    padding: 10px 0px;
+    background-color: #2C2C2C;
+    border: 1px solid #2C2C2C;
+}
+.sort__btn:hover{
+    cursor: pointer;
+    background-color: #49B0B7;
+    border: 1px solid #2C2C2C;
+    color: #000;
+}
+.reset__btn{
+    width: 100%;
+    margin-bottom: 20px;
+    transition: all 300ms;
+    font-size: 24px;
+    padding: 10px 0px;
+    font-family: 'Encode Sans SC', sans-serif;
+    background-color: #49B0B7;
+    border: 1px solid #2C2C2C;
+
+}
+.reset__btn:hover{
+    cursor: pointer;
+    background-color: #2C2C2C;
+    border: 1px solid #2C2C2C;
+    color: #fff;
 }
 </style>
