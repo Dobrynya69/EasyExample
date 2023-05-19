@@ -43,13 +43,11 @@ const props = defineProps({
 .black-some:hover .some-img{
     transform: scale(1)  translate(-50%, -50%);
 }
-
 .item__img {
     height: 300px;
     width: 100%;
     position: relative;
 }
-
 .anim__image{
     width: 100%;
     height: 100%;
@@ -60,5 +58,25 @@ const props = defineProps({
     color: #fff;
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
+}
+@media (max-width: 1025px) {
+    .content__item{
+        width: calc(25% - 10px);
+        margin-right: 10px;
+    }
+}
+@media (max-width: 941px) {
+    .content__item{
+        width: calc(33% - 10px);
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+}
+@media (max-width: 741px) {
+    .content__item{
+        width: calc(50% - 10px);
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
 }
 </style>
