@@ -56,6 +56,11 @@ const handleChange = async (page) =>{
         anim.value = await api.getAnime(page, searchText.value);
     }
 }
+const resetData = () =>{
+    filterList.value = [];
+    searchText.value = "";
+    router.push('/');
+}
 const myStart = () =>{
     window.scroll({
         top: 0,
@@ -75,7 +80,7 @@ const setDefaultImg = () =>{
             <SearchString @change="handleChange(anim.page)" v-model="searchText"/>
             <div class="filter__content">
                 <form  class="filter__form" @submit.prevent>
-                    <button @click="" class="reset__btn">Reset</button>
+                    <button @click="resetData()" class="reset__btn">Reset</button>
                     <div class="geners__list">
                         <div class="checkbox__block" v-for="item in genresList.genres">
                             <label class="block__label">
@@ -221,5 +226,13 @@ input[type="checkbox"]:checked {
     background-color: #2C2C2C;
     border: 1px solid #2C2C2C;
     color: #fff;
+}
+@media (max-width: 941px) {
+    .main__filter {
+        width: 220px;
+    }
+    .main__content {
+        width: calc(100% - 220px);
+    }
 }
 </style>
