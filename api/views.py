@@ -176,9 +176,11 @@ class ParseAnimesView(APIView):
                         exists = self.model_class.objects.get(title=anime.get('title'))
                     except self.model_class.DoesNotExist:
                         description = anime.get('synopsis')
+                        imageURL = anime.get('coverURL')
                         if description == '':
                             description = "There is no description here"
-                        serializer = self.serializer_class(data={'title': anime.get('title'), 'image': anime.get('coverURL'), 'description': description, 'genres': self.addGenres(anime.get('genre'))})
+                        if imageURL != '':
+                            serializer = self.serializer_class(data={'title': anime.get('title'), 'image': imageURL, 'description': description, 'genres': self.addGenres(anime.get('genre'))})
                         
                         if serializer.is_valid():
                             serializer.save()
