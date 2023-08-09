@@ -8,7 +8,11 @@
 body{
     min-height: 100vh;
     position: relative;
+    &.lock{
+        overflow: hidden;
+    }
 }
+
 .bg {
     width: 100%;
     height: 100%;

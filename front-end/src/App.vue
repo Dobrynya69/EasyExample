@@ -1,16 +1,11 @@
 <script setup>
-import VHeader from './components/VHeader.vue';
-import VFooter from './components/VFooter.vue';
-import VMain from './components/VMain.vue';
+import { RouterView } from 'vue-router'
+
 
 </script>
 <template>
-<VHeader/>
-<VMain/>
-<VFooter/>
+<RouterView/>
 </template>
 
 <style scoped lang="scss">
-
-
 </style>
