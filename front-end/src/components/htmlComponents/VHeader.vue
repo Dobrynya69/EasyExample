@@ -14,7 +14,7 @@ const open_menu = () =>{
         <div class="header__container">
             <div class="header__logo"><a href="#"><span class="newcolor">A</span>Things</a></div>
             <div class="header__reg">
-                <div class="log-up">Log<span class="newcolor">Up</span></div>
+                <div class="log-up">Sign<span class="newcolor">Up</span></div>
                 <div class="slash">|</div>
                 <div class="log-in">Log<span class="newcolor">In</span></div>
             </div>

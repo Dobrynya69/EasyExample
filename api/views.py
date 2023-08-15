@@ -151,11 +151,11 @@ class ParseAnimesView(APIView):
     def post(self, request, *args, **kwargs):
         self.model_class.objects.all().delete()
         anime_created = 0
-        providers = ['asura', 'flame', 'luminous', 'realm', 'omega', 'surya']
+        providers = ['flame', 'luminous']
         current_provider = 0
         page = 1
         
-        while(anime_created <= 300 and current_provider < 7):
+        while(anime_created <= 300 and current_provider < len(providers)):
             url = "https://manga-scrapper.p.rapidapi.com/webtoons"
             querystring = {"page": page, "limit": '20', "provider": providers[current_provider],}
             headers = {

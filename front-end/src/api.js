@@ -7,9 +7,16 @@ export const HTTP = axios.create({
 });
 
 export default{
-    async getAnime(){
+    async getAnime(page){
         try{
-            const respons = await HTTP.get('/anime/');
+            if(page === undefined){
+                page = 1;
+            }
+            const respons = await HTTP.get('/anime/',{
+                params: {
+                    page
+                }
+            });
             return respons.data;
         }
         catch(e){
