@@ -6,13 +6,14 @@ $fontR: 'Roboto', sans-serif;
 $colorBlue: #49B0B7;
 $colorBtns: #386568;
 $colorGrey: #2C2C2C;
+$colorGrey2: #4D4D4D;
+
 $colorBlackA: rgba(19, 18, 18, 0.9);
 
 
 %limiter{
     max-width: calc(1140px - 40px);
     margin: 0 auto;
-    // padding: 0px 20px;
 }
 
 @mixin adaptiv-font($pcSize, $mobSize){

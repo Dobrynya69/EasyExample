@@ -22,5 +22,28 @@ export default{
         catch(e){
             console.log(e);
         }
+    },
+    async getAnimeWithSearchString(page, searchString){
+            try{
+                const respons = await HTTP.get('/anime/',{
+                    params: {
+                        page,
+                        string: searchString
+                    }
+                });
+                return respons.data;
+            }
+            catch(e){
+                console.log(e);
+            }
+    },
+    async getGenre(){
+        try{
+            const respons = await HTTP.get('/genre/');
+            return respons.data;
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 }

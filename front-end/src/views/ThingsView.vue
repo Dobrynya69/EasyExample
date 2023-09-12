@@ -3,36 +3,52 @@ import VHeader from '../components/htmlComponents/VHeader.vue';
 import VFooter from '../components/htmlComponents/VFooter.vue';
 import VMain from '../components/htmlComponents/VMain.vue';
 import AnimeList from '../components/AnimeList.vue';
+import SearchString from '../components/SearchString.vue'
 import api from "../api"
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, onBeforeMount} from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute();
 const router = useRouter();
 
 const anime = ref({});
+const genres = ref({})
+
+const searchString = ref("");
+
 
 onMounted(async () =>{
-    setDefaultImg();
-    console.log(route.query.page)
-    if(route.query.page == 1){
-        router.push("/")
-        anime.value = await api.getAnime();
+    genres.value = await api.getGenre();
+    anime.value = await api.getAnime(route.query.page);
+    if(route.query.searchString !== ""){
+        searchString.value = route.query.searchString;
+        anime.value = await api.getAnimeWithSearchString(route.query.page, route.query.searchString);
     }
-    else{
-        anime.value = await api.getAnime(route.query.page);
-    }
-    console.log(anime.value);
+
 });
 
 const setPage = async (page) => {
     if(page >= 1 && page <= anime.value.max_page){
         page_up();
         setDefaultImg();
-        router.push({query: { page: page }});
-        anime.value = await api.getAnime(page);
+        router.push({query: { page: page, searchString: searchString.value }});
+        if(searchString.value !== ""){
+            anime.value = await api.getAnimeWithSearchString(page, route.query.searchString);
+        }
+        else{
+            anime.value = await api.getAnime(page);
+        }
     }
-
+}
+const setAnimeWithGenre = async (page) => {
+    router.push({query: { page: route.query.page, searchString: searchString.value }});
+    // if(filterList.value.length > 0){
+    //     anime.value = await api.getAnimeWithGenres(filterList.value, 1, searchText.value);
+    // }
+    // else{
+    //     anime.value = await api.getAnime(page, searchText.value);
+    // }
+    anime.value = await api.getAnimeWithSearchString(page, searchString.value);
 }
 const page_up = () =>{
     window.scroll({
@@ -42,9 +58,9 @@ const page_up = () =>{
 }
 const setDefaultImg = () =>{
     const allImg = document.querySelectorAll(".item__img_img")       
-        for(let i = 0; i < allImg.length; i++){
-            allImg[i].src = "../../public/bg.png";
-        }
+    for(let i = 0; i < allImg.length; i++){
+        allImg[i].src = "../../public/bg.png";
+    }
 }
 </script>
 <template>
@@ -52,14 +68,16 @@ const setDefaultImg = () =>{
     <VMain>
         <div class="things">
             <div class="things__filter">
-                <div class="filter__search_string">
-                    <input type="text" placeholder="Search..."/>
-                    <img src="../../public/loupe.png" alt="loupe"/>
-                </div>
+                <SearchString
+                    @change="setAnimeWithGenre(anime.page)" 
+                    v-model="searchString"
+                />
                 <div class="filter__container">
                     <div class="filter__reset_btn"><button>Reset</button></div>
-                    <div class="filter__list">
-                        
+                    <div class="filter__genres">
+                        <div class="genres__list">
+                            <div class="genres__item" v-for="item in genres.genres"><span>{{ item.name }}</span><input type="checkbox"/></div>
+                        </div>
                     </div>
                     <div class="filter__sort_btn"><button>Sort</button></div>
                 </div>
@@ -110,22 +128,6 @@ const setDefaultImg = () =>{
     }
 }
 .filter {
-    &__search_string {
-        display: flex;
-        background-color: $colorGrey;
-        input{
-            background-color: $colorGrey;
-            font-family: $fontR;
-            width: 100%;
-            padding: 20px;
-            padding-right: 0px;
-            font-size: 20px;
-        }
-        input:focus{
-            border: none;
-        outline: none;
-        }
-    }
     &__container {
         padding: 20px;
     }
@@ -139,23 +141,80 @@ const setDefaultImg = () =>{
             font-size: 24px;
             padding: 10px 0px;
             color: $colorGrey;
+            transition: all 300ms;
+        }
+        button:hover{
+            cursor: pointer;
+            width: 100%;
+            font-family: $fontES;
+            background-color: $colorGrey;
+            font-size: 24px;
+            padding: 10px 0px;
+            color: #fff;
         }
     }
-    &__list {
-
+    &__genres {
+        max-height: 500px;
+        margin: 20px 0px;
+        overflow-y: scroll;
+        background-color: $colorGrey;
+        padding: 20px;
     }
     &__sort_btn {
         width: 100%;
-
         button{
             width: 100%;
             font-family: $fontES;
             background-color: $colorGrey;
             font-size: 24px;
             padding: 10px 0px;
+            transition: all 300ms;
+        }
+        button:hover{
+            cursor: pointer;
+            width: 100%;
+            font-family: $fontES;
+            background-color: $colorBlue;
+            border: 1px $colorGrey solid;
+            font-size: 24px;
+            padding: 10px 0px;
+            color: $colorGrey;
         }
     }
 }
+.genres {
+    &__list {
+
+    }
+    &__item {
+        font-size: 20px;
+        font-family: $fontR;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 3px solid $colorGrey2;
+        padding-bottom: 3px;
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+            width: 20px;
+            height: 20px;
+            background-color: $colorGrey2;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+            transition: 120ms transform ease-in-out;
+        }
+        input[type="checkbox"]:checked {
+            background-color: $colorBlue;
+        }
+    }
+    &__item:last-child{
+        margin-bottom: 0px;
+    }
+}
+
 
 .pagination {
     &__arrow {
