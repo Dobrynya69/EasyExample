@@ -9,6 +9,7 @@ from .serializers import *
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
+import sched, time
 
 
 #A view for creating comments to some title. Access only to lged in users.
@@ -150,42 +151,18 @@ class ParseAnimesView(APIView):
 
     def post(self, request, *args, **kwargs):
         self.model_class.objects.all().delete()
-        anime_created = 0
-        providers = ['flame', 'luminous']
-        current_provider = 0
-        page = 1
-        
-        while(anime_created <= 300 and current_provider < len(providers)):
-            url = "https://manga-scrapper.p.rapidapi.com/webtoons"
-            querystring = {"page": page, "limit": '20', "provider": providers[current_provider],}
-            headers = {
-                'content-type': 'application/octet-stream',
-                'X-RapidAPI-Key': '3ac8f1a79amsh99e49430e0195f2p15d2e7jsn0b9cc08b17b8',
-                'X-RapidAPI-Host': 'manga-scrapper.p.rapidapi.com'
-            }
-            response = requests.request("GET", url, headers=headers, params=querystring).json()
-            page += 1
-
-            for anime in response:
-                if (type(anime) == str):
-                    page = 0
-                    current_provider += 1
-                    break
-                else:
-                    try:
-                        exists = self.model_class.objects.get(title=anime.get('title'))
-                    except self.model_class.DoesNotExist:
-                        description = anime.get('synopsis')
-                        imageURL = anime.get('coverURL')
-                        if description == '':
-                            description = "There is no description here"
-                        if imageURL != '':
-                            serializer = self.serializer_class(data={'title': anime.get('title'), 'image': imageURL, 'description': description, 'genres': self.addGenres(anime.get('genre'))})
-                        
-                        if serializer.is_valid():
-                            serializer.save()
-                            anime_created += 1
-                        else:
-                            return Response({'message': serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({'message': 'success'}, status=status.HTTP_201_CREATED)
+        for _ in range(100):
+            response = requests.get("https://api.jikan.moe/v4/random/anime").json()
+            if "data" in response:
+                genres = []
+                for genre in response["data"]["genres"]:
+                    genre, _ = self.genre_class.objects.get_or_create(name=genre["name"])
+                    genres.append(genre)
+                model_object, created = self.model_class.objects.get_or_create(
+                    title=response["data"]["title"],
+                    description=response["data"]["synopsis"] if response["data"]["synopsis"] else "",
+                    image=response["data"]["images"]["jpg"]["image_url"])
+                if created:
+                    model_object.genres.set(genres)
+            time.sleep(2)
+        return Response(status=status.HTTP_201_CREATED)

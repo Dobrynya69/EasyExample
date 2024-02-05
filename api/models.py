@@ -9,7 +9,7 @@ class Genre(models.Model):
 class Anime(models.Model):
     title = models.TextField()
     image = models.URLField(max_length=500)
-    genres = models.ManyToManyField(Genre, related_name='genres', null=True)
+    genres = models.ManyToManyField(Genre, related_name='genres')
     description = models.TextField(default='No description')
 
     def __str__(self):

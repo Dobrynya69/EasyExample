@@ -24,16 +24,5 @@ services:
       - CLOUD_API_KEY=931525198692321
       - CLOUD_API_SECRET=AqcRuZrFthzijMTJrjugtl-dH3o
 
-  front:
-    build:
-      context: ./front-end
-      dockerfile: Dockerfile
-    command: [ "http-server", "dist" ]
-    volumes:
-      - .:/front
-      - .:/front/node_modules
-    ports:
-      - 8080:8080
-
 volumes:
   postgres_data:
